@@ -17,6 +17,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { axiosPrivate } from "@/lib/axios";
@@ -98,6 +105,10 @@ export default function CreateTour() {
   const handleFeaturedChange = (checked: boolean) => {
     setFormData((prev) => ({ ...prev, isFeatured: checked }));
   };
+  const handleSelectChange =
+    (name: keyof typeof formData) => (value: string) => {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,38 +202,42 @@ export default function CreateTour() {
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 font-medium">Category</label>
-                  <select
-                    name="categoryId"
-                    value={formData.categoryId}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded"
-                    required
-                  >
-                    <option value="">Select a Category</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
                   <label className="block mb-2 font-medium">Destination</label>
-                  <select
-                    name="destinationId"
+                  <Select
                     value={formData.destinationId}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded"
-                    required
+                    onValueChange={handleSelectChange("destinationId")}
                   >
-                    <option value="">Select a Destination</option>
-                    {destinations.map((destination) => (
-                      <option key={destination.id} value={destination.id}>
-                        {destination.name}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select destination" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {destinations.map((d) => (
+                        <SelectItem key={d.id} value={d.id}>
+                          {d.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block mb-2 font-medium">Category</label>
+                  <Select
+                    value={formData.categoryId}
+                    onValueChange={handleSelectChange("categoryId")}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
