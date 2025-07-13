@@ -9,7 +9,9 @@ import {
   MoreHorizontal,
   Plus,
   Search,
+  TentTree,
   Trash2,
+  TreePalmIcon,
   Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -207,7 +209,7 @@ export default function HomePage() {
                   />
                 ) : (
                   <div className="h-full w-full bg-accent flex items-center justify-center">
-                    <Calendar className="h-16 w-16 text-primary" />
+                    <TentTree className="h-16 w-16 text-primary" />
                   </div>
                 )}
                 {tour.isFeatured && (
