@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { CalendarIcon, ChevronRight, MapPin, User } from "lucide-react";
+import { CalendarIcon, ChevronRight, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -17,110 +17,127 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import ImageUploader from "@/components/custom/image-uploader";
 
-interface EventData {
+interface TourData {
   id: string;
-  name: string;
-  location: string;
+  title: string;
+  destination: {
+    id: string;
+    name: string;
+  };
   description: string;
-  date: string;
-  // bride: string;
-  // groom: string;
+  startDate: string;
+  endDate: string;
+  coverImage: string;
+  isFeatured: boolean;
+  pricePerPerson: number;
+  currency: string;
+  categoryId: string;
 }
 
-export default function UpdateEvent() {
+export default function UpdateTour() {
   const router = useRouter();
   const { id } = useParams();
-  const eventId = id;
+  const tourId = id;
   const { toast } = useToast();
-  const [event, setEvent] = useState<EventData | null>(null);
+  const [tour, setTour] = useState<TourData | null>(null);
   const [loading, setLoading] = useState(true);
   const [files, setFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
+    title: "",
+    destinationId: "",
     description: "",
-    date: new Date(),
-    // bride: "",
-    // groom: "",
+    startDate: new Date(),
+    endDate: new Date(),
+    pricePerPerson: 0,
+    currency: "",
+    isFeatured: false,
+    categoryId: "",
   });
 
   useEffect(() => {
-    if (!eventId) return;
-    fetchEvent();
-  }, [eventId]);
+    if (!tourId) return;
+    fetchTour();
+  }, [tourId]);
 
-  const fetchEvent = async () => {
+  const fetchTour = async () => {
     try {
-      const response = await axiosPrivate.get(`/admin/event/${eventId}`);
+      const response = await axiosPrivate.get(`/tours/${tourId}`);
       if (response.status === 200) {
-        const data = response.data.data;
-        setEvent(data);
+        const data = response.data;
+        setTour(data);
         setFormData({
-          name: data.name,
-          location: data.location,
+          title: data.title,
+          destinationId: data.destination.id,
           description: data.description,
-          date: new Date(data.date),
-          // bride: data.bride || "",
-          // groom: data.groom || "",
+          startDate: new Date(data.startDate),
+          endDate: new Date(data.endDate),
+          pricePerPerson: data.pricePerPerson,
+          currency: data.currency,
+          isFeatured: data.isFeatured,
+          categoryId: data.categoryId,
         });
-        if (data.mediaUrls) {
-          console.log(data.mediaUrls);
-          setExistingImages([data.mediaUrls]);
+        if (data.coverImage) {
+          setExistingImages([data.coverImage]);
         } else {
           setExistingImages([]);
         }
       }
     } catch (error) {
-      console.error("Error fetching event:", error);
+      console.error("Error fetching tour:", error);
     } finally {
       setLoading(false);
     }
   };
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    const val =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+    setFormData((prev) => ({ ...prev, [name]: val }));
   };
 
-  const handleDateChange = (date: Date | undefined) => {
+  const handleDateChange = (date: Date | undefined, field: string) => {
     if (date) {
-      setFormData({ ...formData, date });
+      setFormData({ ...formData, [field]: date });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!eventId) return;
+    if (!tourId) return;
 
     try {
       const form = new FormData();
-      form.append("name", formData.name);
-      form.append("location", formData.location);
+      form.append("title", formData.title);
+      form.append("destinationId", formData.destinationId);
       form.append("description", formData.description);
-      form.append("date", formData.date.toISOString());
-      // form.append("bride", formData.bride);
-      // form.append("groom", formData.groom);
+      form.append("startDate", formData.startDate.toISOString());
+      form.append("endDate", formData.endDate.toISOString());
+      form.append("pricePerPerson", String(formData.pricePerPerson));
+      form.append("currency", formData.currency);
+      form.append("isFeatured", String(formData.isFeatured));
+      form.append("categoryId", formData.categoryId);
+
       if (files.length !== 0) {
-        files.forEach((file) => form.append("files", file));
+        form.append("coverImage", files[0]);
       }
 
-      const response = await axiosPrivate.patch(
-        `/admin/event/${eventId}`,
-        form,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axiosPrivate.put(`/tours/${tourId}`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       if (response.status === 200) {
-        toast({ title: "Event updated successfully!" });
+        toast({ title: "Tour updated successfully!" });
         window.location.href = "/";
-        window.location.reload();
       }
     } catch (error) {
-      console.error("Error updating event:", error);
-      toast({ title: "Error updating event" });
+      console.error("Error updating tour:", error);
+      toast({ title: "Error updating tour" });
     }
   };
 
@@ -128,14 +145,12 @@ export default function UpdateEvent() {
     <div className="flex-1 flex flex-col">
       <main className="flex-1 sm:px-16 px-6 py-6 overflow-auto">
         <div className="max-w-3xl">
-          <h1 className="text-2xl font-medium mb-2">Update Event</h1>
-
+          <h1 className="text-2xl font-medium mb-2">Update Tour</h1>
           <div className="flex items-center gap-2 text-sm mb-6">
             <span className="text-primary">Dashboard</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            <span>Update Event</span>
+            <span>Update Tour</span>
           </div>
-
           {loading ? (
             <div className="space-y-6">
               {[...Array(6)].map((_, index) => (
@@ -147,17 +162,14 @@ export default function UpdateEvent() {
               <div>
                 <label className="block mb-2 font-medium">Title</label>
                 <Input
-                  name="name"
-                  value={formData.name}
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
                   required
                 />
               </div>
-
               <div>
-                <label className="block mb-2 font-medium">
-                  Event Date & Time
-                </label>
+                <label className="block mb-2 font-medium">Start Date</label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -165,35 +177,81 @@ export default function UpdateEvent() {
                       className="w-full justify-start text-left"
                     >
                       <CalendarIcon className="mr-2 h-5 w-5 text-muted-foreground" />
-                      {formData.date
-                        ? format(formData.date, "PPP p")
+                      {formData.startDate
+                        ? format(formData.startDate, "PPP")
                         : "Pick a date"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent align="start" className="w-auto">
                     <Calendar
                       mode="single"
-                      selected={formData.date}
-                      onSelect={handleDateChange}
+                      selected={formData.startDate}
+                      onSelect={(date) => handleDateChange(date, "startDate")}
                       initialFocus
                     />
                   </PopoverContent>
                 </Popover>
               </div>
-
               <div>
-                <label className="block mb-2 font-medium">Location</label>
-                <div className="relative">
-                  <Input
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                  />
-                  <MapPin className="absolute right-3 top-3 h-5 w-5 text-muted-foreground" />
-                </div>
+                <label className="block mb-2 font-medium">End Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left"
+                    >
+                      <CalendarIcon className="mr-2 h-5 w-5 text-muted-foreground" />
+                      {formData.endDate
+                        ? format(formData.endDate, "PPP")
+                        : "Pick a date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-auto">
+                    <Calendar
+                      mode="single"
+                      selected={formData.endDate}
+                      onSelect={(date) => handleDateChange(date, "endDate")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
-
+              <div>
+                <label className="block mb-2 font-medium">
+                  Price per Person
+                </label>
+                <Input
+                  name="pricePerPerson"
+                  type="number"
+                  value={formData.pricePerPerson}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-medium">Currency</label>
+                <Input
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  name="isFeatured"
+                  checked={formData.isFeatured}
+                  onChange={handleChange}
+                  className="h-4 w-4"
+                />
+                <label
+                  htmlFor="isFeatured"
+                  className="text-sm font-medium leading-none"
+                >
+                  Is Featured
+                </label>
+              </div>
               <div>
                 <label className="block mb-2 font-medium">Description</label>
                 <textarea
@@ -205,44 +263,16 @@ export default function UpdateEvent() {
                   required
                 />
               </div>
-
-              {/* <div>
-                <label className="block mb-2 font-medium">Bride</label>
-                <div className="relative">
-                  <Input
-                    name="bride"
-                    value={formData.bride}
-                    onChange={handleChange}
-                    required
-                  />
-                  <User className="absolute right-3 top-3 h-5 w-5 text-muted-foreground" />
-                </div>
-              </div>
-
               <div>
-                <label className="block mb-2 font-medium">Groom</label>
-                <div className="relative">
-                  <Input
-                    name="groom"
-                    value={formData.groom}
-                    onChange={handleChange}
-                    required
-                  />
-                  <User className="absolute right-3 top-3 h-5 w-5 text-muted-foreground" />
-                </div>
-              </div> */}
-              <div>
-                <label className="block mb-2 font-medium">Upload Image</label>
+                <label className="block mb-2 font-medium">Cover Image</label>
                 <div className="relative">
                   <ImageUploader
                     existingImages={existingImages}
-                    multiple={true}
                     value={files}
                     onChange={setFiles}
                   />
                 </div>
               </div>
-
               <div className="flex justify-end gap-4 mt-6">
                 <Button
                   type="button"
