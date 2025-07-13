@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, Tag } from "lucide-react";
 import { format } from "date-fns";
 interface TourPreviewProps {
   formData: {
     title: string;
+    description: string;
     startDate: Date;
     endDate: Date;
     pricePerPerson: number;
@@ -15,6 +16,7 @@ interface TourPreviewProps {
   files: File[];
   existingCoverImage: string;
   destinationName: string;
+  categoryName: string;
 }
 
 const TourPreview = ({
@@ -22,6 +24,7 @@ const TourPreview = ({
   files,
   existingCoverImage,
   destinationName,
+  categoryName,
 }: TourPreviewProps) => {
   const [previewImage, setPreviewImage] = useState<string | null>(
     existingCoverImage,
@@ -86,6 +89,16 @@ const TourPreview = ({
               / person
             </span>
           </p>
+        </div>
+        <div className="border-t mt-4 pt-4">
+          <h3 className="font-semibold text-lg mb-2">About this tour</h3>
+          <p className="text-muted-foreground text-sm mb-4">
+            {formData.description || "The tour description will be shown here."}
+          </p>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Tag className="h-4 w-4 mr-2" />
+            <span>Category: {categoryName || "Not set"}</span>
+          </div>
         </div>
       </div>
     </div>
