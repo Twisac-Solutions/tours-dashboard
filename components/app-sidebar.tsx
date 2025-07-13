@@ -20,6 +20,7 @@ import {
   Calendar,
   PackageIcon,
   UsersRoundIcon,
+  LayoutListIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -72,6 +73,7 @@ export function AppSidebar() {
           icon: PlaneIcon,
           url: "/destinations",
         },
+        { title: "Categories", icon: LayoutListIcon, url: "/categories" },
         { title: "Events", icon: Calendar, url: "/events" },
         { title: "Packages", icon: PackageIcon, url: "/packages" },
         { title: "Users", icon: UsersRoundIcon, url: "/guests", badge: "BETA" },
