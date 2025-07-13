@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import ImageUploader from "@/components/custom/image-uploader";
+import { Switch } from "@/components/ui/switch";
+import TourPreview from "@/components/TourPreview";
 
 interface TourData {
   id: string;
@@ -106,6 +108,9 @@ export default function UpdateTour() {
       setFormData({ ...formData, [field]: date });
     }
   };
+  const handleFeaturedChange = (checked: boolean) => {
+    setFormData((prev) => ({ ...prev, isFeatured: checked }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,7 +149,7 @@ export default function UpdateTour() {
   return (
     <div className="flex-1 flex flex-col">
       <main className="flex-1 sm:px-16 px-6 py-6 overflow-auto">
-        <div className="max-w-3xl">
+        <div className="w-full">
           <h1 className="text-2xl font-medium mb-2">Update Tour</h1>
           <div className="flex items-center gap-2 text-sm mb-6">
             <span className="text-primary">Dashboard</span>
@@ -158,135 +163,165 @@ export default function UpdateTour() {
               ))}
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block mb-2 font-medium">Title</label>
-                <Input
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-2 font-medium">Start Date</label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left"
-                    >
-                      <CalendarIcon className="mr-2 h-5 w-5 text-muted-foreground" />
-                      {formData.startDate
-                        ? format(formData.startDate, "PPP")
-                        : "Pick a date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-auto">
-                    <Calendar
-                      mode="single"
-                      selected={formData.startDate}
-                      onSelect={(date) => handleDateChange(date, "startDate")}
-                      initialFocus
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="max-w-3xl">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="block mb-2 font-medium">Title</label>
+                    <Input
+                      name="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      required
                     />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div>
-                <label className="block mb-2 font-medium">End Date</label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left"
-                    >
-                      <CalendarIcon className="mr-2 h-5 w-5 text-muted-foreground" />
-                      {formData.endDate
-                        ? format(formData.endDate, "PPP")
-                        : "Pick a date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-auto">
-                    <Calendar
-                      mode="single"
-                      selected={formData.endDate}
-                      onSelect={(date) => handleDateChange(date, "endDate")}
-                      initialFocus
+                  </div>
+                  <div>
+                    <label className="block mb-2 font-medium">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      rows={4}
+                      className="w-full border rounded-md p-2"
+                      required
                     />
-                  </PopoverContent>
-                </Popover>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-2 font-medium">
+                        Start Date
+                      </label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left"
+                          >
+                            <CalendarIcon className="mr-2 h-5 w-5 text-muted-foreground" />
+                            {formData.startDate
+                              ? format(formData.startDate, "PPP")
+                              : "Pick a date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-auto">
+                          <Calendar
+                            mode="single"
+                            selected={formData.startDate}
+                            onSelect={(date) =>
+                              handleDateChange(date, "startDate")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div>
+                      <label className="block mb-2 font-medium">End Date</label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left"
+                          >
+                            <CalendarIcon className="mr-2 h-5 w-5 text-muted-foreground" />
+                            {formData.endDate
+                              ? format(formData.endDate, "PPP")
+                              : "Pick a date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-auto">
+                          <Calendar
+                            mode="single"
+                            selected={formData.endDate}
+                            onSelect={(date) =>
+                              handleDateChange(date, "endDate")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-2 font-medium">
+                        Price per Person
+                      </label>
+                      <Input
+                        name="pricePerPerson"
+                        type="number"
+                        value={formData.pricePerPerson}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2 font-medium">Currency</label>
+                      <Input
+                        name="currency"
+                        value={formData.currency}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      name="isFeatured"
+                      checked={formData.isFeatured}
+                      onCheckedChange={handleFeaturedChange}
+                    />
+                    <label
+                      htmlFor="isFeatured"
+                      className="text-sm font-medium leading-none"
+                    >
+                      Is Featured
+                    </label>
+                  </div>
+                  <div>
+                    <label className="block mb-2 font-medium">
+                      Cover Image
+                    </label>
+                    <div className="relative">
+                      <ImageUploader
+                        existingImages={existingImages}
+                        value={files}
+                        onChange={setFiles}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-4 mt-6">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => router.back()}
+                      className="px-8 text-primary"
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="px-8">
+                      Save Changes
+                    </Button>
+                  </div>
+                </form>
               </div>
-              <div>
-                <label className="block mb-2 font-medium">
-                  Price per Person
-                </label>
-                <Input
-                  name="pricePerPerson"
-                  type="number"
-                  value={formData.pricePerPerson}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-2 font-medium">Currency</label>
-                <Input
-                  name="currency"
-                  value={formData.currency}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  name="isFeatured"
-                  checked={formData.isFeatured}
-                  onChange={handleChange}
-                  className="h-4 w-4"
-                />
-                <label
-                  htmlFor="isFeatured"
-                  className="text-sm font-medium leading-none"
-                >
-                  Is Featured
-                </label>
-              </div>
-              <div>
-                <label className="block mb-2 font-medium">Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full border rounded-md p-2"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-2 font-medium">Cover Image</label>
-                <div className="relative">
-                  <ImageUploader
-                    existingImages={existingImages}
-                    value={files}
-                    onChange={setFiles}
+              <div className="">
+                <h2 className="text-xl font-medium mb-4 text-center">
+                  Live Preview
+                </h2>
+                <div className="sticky top-6">
+                  <TourPreview
+                    formData={formData}
+                    files={files}
+                    existingCoverImage={existingImages[0]}
+                    destinationName={""}
                   />
                 </div>
               </div>
-              <div className="flex justify-end gap-4 mt-6">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => router.back()}
-                  className="px-8 text-primary"
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" className="px-8">
-                  Save Changes
-                </Button>
-              </div>
-            </form>
+            </div>
           )}
         </div>
       </main>

@@ -15,6 +15,11 @@ import {
   ShoppingBasket,
   LibraryBig,
   BookImage,
+  TentTree,
+  PlaneIcon,
+  Calendar,
+  PackageIcon,
+  UsersRoundIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,36 +66,21 @@ export function AppSidebar() {
     {
       title: "EVENT",
       items: [
-        { title: "Love Story", icon: Heart, url: "/love-story" },
+        { title: "Tours", icon: TentTree, url: "/tours" },
         {
-          title: "Event Itinerary",
-          icon: CalendarClock,
-          url: "/itinerary",
+          title: "Destinations",
+          icon: PlaneIcon,
+          url: "/destinations",
         },
-        { title: "Trivia Games", icon: Gamepad2, url: "/trivia" },
-        { title: "Gift Contributions", icon: Gift, url: "/gifts" },
-        { title: "Vendors", icon: ShoppingBasket, url: "/vendors" },
-        { title: "Albums", icon: LibraryBig, url: "/albums" },
-        { title: "Guests", icon: List, url: "/guests", badge: "BETA" },
+        { title: "Events", icon: Calendar, url: "/events" },
+        { title: "Packages", icon: PackageIcon, url: "/packages" },
+        { title: "Users", icon: UsersRoundIcon, url: "/guests", badge: "BETA" },
         // { title: "Bridal Maids & Grooms", icon: Users, url: "#" },
       ],
     },
     {
-      title: "POST EVENT",
-      items: [
-        {
-          title: "Posts",
-          icon: BookImage,
-          url: "/posts",
-          action: true,
-        },
-      ],
-    },
-    {
       title: "MANAGER",
-      items: [
-        { title: "Add Event Manager", icon: UserPlus, url: "#", action: true },
-      ],
+      items: [{ title: "Managers", icon: UserPlus, url: "#", action: true }],
     },
   ];
 
