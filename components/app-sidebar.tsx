@@ -76,7 +76,7 @@ export function AppSidebar() {
         { title: "Categories", icon: LayoutListIcon, url: "/categories" },
         { title: "Events", icon: Calendar, url: "/events" },
         { title: "Packages", icon: PackageIcon, url: "/packages" },
-        { title: "Users", icon: UsersRoundIcon, url: "/guests", badge: "BETA" },
+        { title: "Users", icon: UsersRoundIcon, url: "/users", badge: "BETA" },
         // { title: "Bridal Maids & Grooms", icon: Users, url: "#" },
       ],
     },
