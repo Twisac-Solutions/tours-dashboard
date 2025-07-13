@@ -60,7 +60,7 @@ export default function UpdateTour() {
   const [formData, setFormData] = useState({
     title: "",
     destinationId: "",
-    description: "",
+    desc: "",
     startDate: new Date(),
     endDate: new Date(),
     pricePerPerson: 0,
@@ -86,7 +86,7 @@ export default function UpdateTour() {
         setFormData({
           title: data.title,
           destinationId: data.destination.id,
-          description: data.description,
+          desc: data.description,
           startDate: new Date(data.startDate),
           endDate: new Date(data.endDate),
           pricePerPerson: data.pricePerPerson,
@@ -154,7 +154,7 @@ export default function UpdateTour() {
       const form = new FormData();
       form.append("title", formData.title);
       form.append("destinationId", formData.destinationId);
-      form.append("description", formData.description);
+      form.append("description", formData.desc);
       form.append("startDate", formData.startDate.toISOString());
       form.append("endDate", formData.endDate.toISOString());
       form.append("pricePerPerson", String(formData.pricePerPerson));
@@ -219,7 +219,7 @@ export default function UpdateTour() {
                     </label>
                     <textarea
                       name="description"
-                      value={formData.description}
+                      value={formData.desc}
                       onChange={handleChange}
                       rows={4}
                       className="w-full border rounded-md p-2"

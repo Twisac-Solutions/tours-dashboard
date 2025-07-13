@@ -6,7 +6,7 @@ import { format } from "date-fns";
 interface TourPreviewProps {
   formData: {
     title: string;
-    description: string;
+    desc: string;
     startDate: Date;
     endDate: Date;
     pricePerPerson: number;
@@ -14,9 +14,9 @@ interface TourPreviewProps {
     isFeatured: boolean;
   };
   files: File[];
-  existingCoverImage: string;
-  destinationName: string;
-  categoryName: string;
+  existingCoverImage?: string;
+  destinationName?: string;
+  categoryName?: string;
 }
 
 const TourPreview = ({
@@ -26,9 +26,7 @@ const TourPreview = ({
   destinationName,
   categoryName,
 }: TourPreviewProps) => {
-  const [previewImage, setPreviewImage] = useState<string | null>(
-    existingCoverImage,
-  );
+  const [previewImage, setPreviewImage] = useState<string | null>();
 
   useEffect(() => {
     if (files && files.length > 0) {
@@ -93,7 +91,7 @@ const TourPreview = ({
         <div className="border-t mt-4 pt-4">
           <h3 className="font-semibold text-lg mb-2">About this tour</h3>
           <p className="text-muted-foreground text-sm mb-4">
-            {formData.description || "The tour description will be shown here."}
+            {formData.desc || "The tour description will be shown here."}
           </p>
           <div className="flex items-center text-sm text-muted-foreground">
             <Tag className="h-4 w-4 mr-2" />
