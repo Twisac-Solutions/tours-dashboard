@@ -36,6 +36,16 @@ interface TourData {
   categoryId: string;
 }
 
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface Destination {
+  id: string;
+  name: string;
+}
+
 export default function UpdateTour() {
   const router = useRouter();
   const { id } = useParams();
@@ -45,6 +55,8 @@ export default function UpdateTour() {
   const [loading, setLoading] = useState(true);
   const [files, setFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [destinations, setDestinations] = useState<Destination[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     destinationId: "",
@@ -55,11 +67,14 @@ export default function UpdateTour() {
     currency: "",
     isFeatured: false,
     categoryId: "",
+    destination: "",
   });
 
   useEffect(() => {
     if (!tourId) return;
     fetchTour();
+    fetchCategories();
+    fetchDestinations();
   }, [tourId]);
 
   const fetchTour = async () => {
@@ -78,6 +93,7 @@ export default function UpdateTour() {
           currency: data.currency,
           isFeatured: data.isFeatured,
           categoryId: data.categoryId,
+          destination: data.destination.name,
         });
         if (data.coverImage) {
           setExistingImages([data.coverImage]);
@@ -89,6 +105,24 @@ export default function UpdateTour() {
       console.error("Error fetching tour:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axiosPrivate.get("/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchDestinations = async () => {
+    try {
+      const response = await axiosPrivate.get("/destinations");
+      setDestinations(response.data.data);
+    } catch (error) {
+      console.error("Error fetching destinations:", error);
     }
   };
 
@@ -145,6 +179,10 @@ export default function UpdateTour() {
       toast({ title: "Error updating tour" });
     }
   };
+  const destinationName =
+    destinations.find((d) => d.id === formData.destinationId)?.name || "";
+  const categoryName =
+    categories.find((c) => c.id === formData.categoryId)?.name || "";
 
   return (
     <div className="flex-1 flex flex-col">
@@ -187,6 +225,42 @@ export default function UpdateTour() {
                       className="w-full border rounded-md p-2"
                       required
                     />
+                  </div>
+                  <div>
+                    <label className="block mb-2 font-medium">Category</label>
+                    <select
+                      name="categoryId"
+                      value={formData.categoryId}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded"
+                      required
+                    >
+                      <option value="">Select a Category</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block mb-2 font-medium">
+                      Destination
+                    </label>
+                    <select
+                      name="destinationId"
+                      value={formData.destinationId}
+                      onChange={handleChange}
+                      className="w-full p-2 border rounded"
+                      required
+                    >
+                      <option value="">Select a Destination</option>
+                      {destinations.map((destination) => (
+                        <option key={destination.id} value={destination.id}>
+                          {destination.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -317,7 +391,8 @@ export default function UpdateTour() {
                     formData={formData}
                     files={files}
                     existingCoverImage={existingImages[0]}
-                    destinationName={""}
+                    destinationName={destinationName}
+                    categoryName={categoryName}
                   />
                 </div>
               </div>
