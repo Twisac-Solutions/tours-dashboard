@@ -74,9 +74,15 @@ export function AppSidebar() {
           url: "/destinations",
         },
         { title: "Categories", icon: LayoutListIcon, url: "/categories" },
-        { title: "Events", icon: Calendar, url: "/events" },
-        { title: "Packages", icon: PackageIcon, url: "/packages" },
-        { title: "Users", icon: UsersRoundIcon, url: "/users", badge: "BETA" },
+        { title: "Users", icon: UsersRoundIcon, url: "/users" },
+        { title: "Events", icon: Calendar, url: "/events", badge: "BETA" },
+        {
+          title: "Packages",
+          icon: PackageIcon,
+          url: "/packages",
+          badge: "BETA",
+        },
+
         // { title: "Bridal Maids & Grooms", icon: Users, url: "#" },
       ],
     },
