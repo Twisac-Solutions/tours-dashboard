@@ -6,7 +6,8 @@ import { format } from "date-fns";
 interface TourPreviewProps {
   formData: {
     title: string;
-    desc: string;
+    description: string;
+    about: string;
     startDate: Date;
     endDate: Date;
     pricePerPerson: number;
@@ -91,12 +92,15 @@ const TourPreview = ({
         <div className="border-t mt-4 pt-4">
           <h3 className="font-semibold text-lg mb-2">About this tour</h3>
           <p className="text-muted-foreground text-sm mb-4">
-            {formData.desc || "The tour description will be shown here."}
+            {formData.description || "The tour description will be shown here."}
           </p>
           <div className="flex items-center text-sm text-muted-foreground">
             <Tag className="h-4 w-4 mr-2" />
             <span>Category: {categoryName || "Not set"}</span>
           </div>
+          <p className="text-muted-foreground text-sm mb-4">
+            {formData.about || "The tour about will be shown here."}
+          </p>
         </div>
       </div>
     </div>

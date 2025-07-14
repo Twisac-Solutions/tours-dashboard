@@ -47,7 +47,8 @@ export default function CreateTour() {
     title: "",
     destinationId: "",
     categoryId: "",
-    desc: "",
+    description: "",
+    about: "",
     startDate: new Date(),
     endDate: new Date(),
     pricePerPerson: 0,
@@ -117,7 +118,8 @@ export default function CreateTour() {
     data.append("title", formData.title);
     data.append("destinationId", formData.destinationId);
     data.append("categoryId", formData.categoryId);
-    data.append("desc", formData.desc);
+    data.append("description", formData.description);
+    data.append("about", formData.about);
     data.append("startDate", formData.startDate.toISOString());
     data.append("endDate", formData.endDate.toISOString());
     data.append("pricePerPerson", String(formData.pricePerPerson));
@@ -140,7 +142,8 @@ export default function CreateTour() {
         title: "",
         destinationId: "",
         categoryId: "",
-        desc: "",
+        description: "",
+        about: "",
         startDate: new Date(),
         endDate: new Date(),
         pricePerPerson: 0,
@@ -194,8 +197,8 @@ export default function CreateTour() {
                 <div>
                   <label className="block mb-2 font-medium">Description</label>
                   <Textarea
-                    name="desc"
-                    value={formData.desc}
+                    name="description"
+                    value={formData.description}
                     onChange={handleChange}
                     placeholder="Enter Tour Description"
                     required
@@ -238,6 +241,16 @@ export default function CreateTour() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+                <div>
+                  <label className="block mb-2 font-medium">About</label>
+                  <Textarea
+                    name="about"
+                    value={formData.about}
+                    onChange={handleChange}
+                    placeholder="Tell more about your tour"
+                    required
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>

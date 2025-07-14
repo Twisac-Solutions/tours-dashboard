@@ -56,6 +56,7 @@ export interface TourData {
     name: string;
   };
   description: string;
+  about: string;
   startDate: string;
   endDate: string;
   coverImage: string;

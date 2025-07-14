@@ -34,6 +34,7 @@ interface TourData {
     name: string;
   };
   description: string;
+  about: string;
   startDate: string;
   endDate: string;
   coverImage: string;
@@ -67,7 +68,8 @@ export default function UpdateTour() {
   const [formData, setFormData] = useState({
     title: "",
     destinationId: "",
-    desc: "",
+    description: "",
+    about: "",
     startDate: new Date(),
     endDate: new Date(),
     pricePerPerson: 0,
@@ -93,7 +95,8 @@ export default function UpdateTour() {
         setFormData({
           title: data.title,
           destinationId: data.destination.id,
-          desc: data.description,
+          description: data.description,
+          about: data.about,
           startDate: new Date(data.startDate),
           endDate: new Date(data.endDate),
           pricePerPerson: data.pricePerPerson,
@@ -166,7 +169,8 @@ export default function UpdateTour() {
       const form = new FormData();
       form.append("title", formData.title);
       form.append("destinationId", formData.destinationId);
-      form.append("description", formData.desc);
+      form.append("description", formData.description);
+      form.append("about", formData.about);
       form.append("startDate", formData.startDate.toISOString());
       form.append("endDate", formData.endDate.toISOString());
       form.append("pricePerPerson", String(formData.pricePerPerson));
@@ -231,7 +235,7 @@ export default function UpdateTour() {
                     </label>
                     <textarea
                       name="description"
-                      value={formData.desc}
+                      value={formData.description}
                       onChange={handleChange}
                       rows={4}
                       className="w-full border rounded-md p-2"
@@ -277,6 +281,17 @@ export default function UpdateTour() {
                         ))}
                       </SelectContent>
                     </Select>
+                  </div>
+                  <div>
+                    <label className="block mb-2 font-medium">About</label>
+                    <textarea
+                      name="about"
+                      value={formData.about}
+                      onChange={handleChange}
+                      rows={4}
+                      className="w-full border rounded-md p-2"
+                      required
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
