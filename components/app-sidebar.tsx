@@ -104,7 +104,7 @@ export function AppSidebar() {
             height={100}
             className="h-8 w-8"
           />
-          <h2 className="sm:block hidden text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#F7B24D] to-[#ED266F]">
+          <h2 className="sm:block hidden text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#F7B24D] to-[#34a85b]">
             Tours
           </h2>
         </Link>
