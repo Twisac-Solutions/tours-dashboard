@@ -25,7 +25,6 @@ export default function SignUp() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phoneNumber: "",
     password: "",
     confirm_password: "",
   });
@@ -34,36 +33,7 @@ export default function SignUp() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  const formatPhoneNumber = (phoneNumber: string): string => {
-    // Remove all non-numeric characters
-    const cleaned = phoneNumber.replace(/\D/g, "");
 
-    // Format as XXX-XXX-XXXX
-    if (cleaned.length >= 10) {
-      return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(
-        6,
-        10,
-      )}`;
-    }
-
-    return cleaned;
-  };
-
-  //   const handlePhoneInputChange = (value: string) => {
-  //     setFormData((prev) => ({ ...prev, phoneNumber: value }));
-  //   };
-  const handlePhoneInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedNumber = formatPhoneNumber(e.target.value);
-    setFormData((prev) => ({ ...prev, phoneNumber: formattedNumber }));
-  };
-  const validatePhoneNumber = (phoneNumber: string): string | null => {
-    const phonePattern =
-      /^\(?([2-9][0-9]{2})\)?[-.● ]?([2-9][0-9]{2})[-.● ]?([0-9]{4})$/;
-    if (!phonePattern.test(phoneNumber)) {
-      return "Phone number is not valid. It should match the pattern (XXX) XXX-XXXX.";
-    }
-    return null;
-  };
   const validatePassword = (password: string): string | null => {
     if (password.length < 8 || password.length > 100) {
       return "Password must be between 8 and 100 characters.";
@@ -98,15 +68,6 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      const phoneError = validatePhoneNumber(formData.phoneNumber);
-      if (phoneError) {
-        toast({
-          title: "Phone Number Error",
-          description: phoneError,
-          variant: "destructive",
-        });
-        throw new Error(phoneError);
-      }
       const passwordError = validatePassword(formData.password);
       if (passwordError) {
         toast({
@@ -126,9 +87,8 @@ export default function SignUp() {
         throw new Error("Passwords do not match");
       }
       const response = await axiosPublic.post("/auth/register", {
-        fullName: formData.name,
+        name: formData.name,
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
         password: formData.password,
       });
 
