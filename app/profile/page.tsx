@@ -196,7 +196,7 @@ export default function ProfilePage() {
     if (cleaned.length >= 10) {
       return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 6)}-${cleaned.slice(
         6,
-        10
+        10,
       )}`;
     }
 
@@ -255,7 +255,7 @@ export default function ProfilePage() {
                         <Image
                           src={
                             avatarPreview ||
-                            profile.avatar ||
+                            profile.profile_picture ||
                             "/placeholder.svg"
                           }
                           alt="Profile picture"
