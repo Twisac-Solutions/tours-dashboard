@@ -84,7 +84,7 @@ export default function LogIn() {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-6 border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent  pl-4 pr-12 border-[#e5e5e5] "
+                  className="w-full p-6 border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent  pl-4 pr-12 border-border "
                   placeholder="example@email.com"
                 />
               </div>
@@ -105,7 +105,7 @@ export default function LogIn() {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full p-6 border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent  pl-4 pr-12 border-[#e5e5e5]"
+                  className="w-full p-6 border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent  pl-4 pr-12 border-border "
                   placeholder="*********"
                 />
 
