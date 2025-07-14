@@ -152,7 +152,7 @@ const NewPasswordPage = () => {
         </div>
       </div>
       {/* Right Side */}
-      <OnboardImage imageSrc="/assets/sliding-mobile.png" />
+      <OnboardImage imageSrc="/assets/3.jpg" />
     </div>
   );
 };

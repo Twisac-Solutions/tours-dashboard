@@ -154,7 +154,7 @@ const ResetPasswordPage = () => {
         </div>
       </div>
       {/* Right Side */}
-      <OnboardImage imageSrc="/assets/sliding-mobile.png" />
+      <OnboardImage imageSrc="/assets/2.jpg" />
     </div>
   );
 };

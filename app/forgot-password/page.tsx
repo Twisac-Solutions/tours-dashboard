@@ -110,7 +110,7 @@ export default function ForgotPasswordPage() {
         </div>
       </div>
       {/* Right Side */}
-      <OnboardImage imageSrc="/assets/subtract.png" />
+      <OnboardImage imageSrc="/assets/2.jpg" />
     </div>
   );
 }

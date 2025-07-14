@@ -161,7 +161,7 @@ export default function LogIn() {
         </div>
       </div>
       {/* Right Side - Sign In Form */}
-      <OnboardImage imageSrc="/assets/subtract.png" />
+      <OnboardImage imageSrc="/assets/2.jpg" />
     </div>
   );
 }

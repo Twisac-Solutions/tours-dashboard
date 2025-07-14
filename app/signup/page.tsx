@@ -258,7 +258,7 @@ export default function SignUp() {
           </form>
         </div>
       </div>
-      <OnboardImage imageSrc="/assets/Mobile Mock-Up Slide.png" />
+      <OnboardImage imageSrc="/assets/1.jpg" />
     </div>
   );
 }
