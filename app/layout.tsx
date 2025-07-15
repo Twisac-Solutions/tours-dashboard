@@ -4,6 +4,7 @@ import { LayoutProvider } from "@/components/layout/layout-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Poppins } from "next/font/google";
 import { Style_Script } from "next/font/google";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,7 +40,9 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <LayoutProvider>{children}</LayoutProvider>
+          <TooltipProvider>
+            <LayoutProvider>{children}</LayoutProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
