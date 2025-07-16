@@ -94,13 +94,16 @@ const TourPreview = ({
           <p className="text-muted-foreground text-sm mb-4">
             {formData.description || "The tour description will be shown here."}
           </p>
-          <div className="flex items-center text-sm text-muted-foreground">
+          <div className="flex items-center text-sm text-muted-foreground mb-4">
             <Tag className="h-4 w-4 mr-2" />
             <span>Category: {categoryName || "Not set"}</span>
           </div>
-          <p className="text-muted-foreground text-sm mb-4">
-            {formData.about || "The tour about will be shown here."}
-          </p>
+          <div
+            className="mb-4"
+            dangerouslySetInnerHTML={{
+              __html: formData.about || "The tour about will be shown here.",
+            }}
+          />
         </div>
       </div>
     </div>

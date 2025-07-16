@@ -42,6 +42,7 @@ import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import ImageUploader from "@/components/custom/image-uploader";
+import { Textarea } from "@/components/ui/textarea";
 
 /* ---------- TYPE ---------- */
 interface Destination {
@@ -238,6 +239,8 @@ function CreateEditDialog({
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
   const { toast } = useToast();
 
   /* form */
@@ -246,7 +249,6 @@ function CreateEditDialog({
     description: "",
     region: "",
     country: "",
-    coverImage: null as File | null,
   });
 
   /* prefill on edit */
@@ -257,15 +259,18 @@ function CreateEditDialog({
         description: destination.description,
         region: destination.region,
         country: destination.country,
-        coverImage: null,
       });
+      if (destination.coverImage) {
+        setExistingImages([destination.coverImage]);
+      } else {
+        setExistingImages([]);
+      }
     } else {
       setForm({
         name: "",
         description: "",
         region: "",
         country: "",
-        coverImage: null,
       });
     }
   }, [destination, open]);
@@ -276,24 +281,30 @@ function CreateEditDialog({
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const handleFile = (files: File[]) =>
-    setForm({ ...form, coverImage: files[0] || null });
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     const payload = new FormData();
-    Object.entries(form).forEach(([k, v]) => {
-      if (v) payload.append(k, v);
-    });
+    payload.append("name", form.name);
+    payload.append("destinationId", form.description);
+    payload.append("categoryId", form.region);
+    payload.append("description", form.country);
+
+    if (files.length !== 0) {
+      payload.append("coverImage", files[0]);
+    }
 
     try {
       if (destination) {
-        await axiosPrivate.put(`/destinations/${destination.id}`, payload);
+        await axiosPrivate.put(`/destinations/${destination.id}`, payload, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         toast({ title: "Destination updated" });
       } else {
-        await axiosPrivate.post("/destinations", payload);
+        await axiosPrivate.post("/destinations", payload, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         toast({ title: "Destination created" });
       }
       setOpen(false);
@@ -350,7 +361,7 @@ function CreateEditDialog({
               onChange={handleChange}
               required
             />
-            <textarea
+            <Textarea
               name="description"
               placeholder="Description"
               value={form.description}
@@ -360,9 +371,9 @@ function CreateEditDialog({
               className="w-full rounded-md border p-2"
             />
             <ImageUploader
-              multiple={false}
-              value={form.coverImage ? [form.coverImage] : []}
-              onChange={handleFile}
+              existingImages={existingImages}
+              value={files}
+              onChange={setFiles}
             />
           </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import dynamic from "next/dynamic";
 import {
   Calendar as CalendarIcon,
   ChevronRight,
@@ -32,6 +33,16 @@ import Link from "next/link";
 import ImageUploader from "@/components/custom/image-uploader";
 import TourPreview from "@/components/TourPreview";
 import { Switch } from "@/components/ui/switch";
+// import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
+import { Content } from "@tiptap/react";
+
+const MinimalTiptapEditor = dynamic(
+  () =>
+    import("@/components/minimal-tiptap").then(
+      (mod) => mod.MinimalTiptapEditor,
+    ),
+  { ssr: false },
+);
 
 interface Category {
   id: string;
@@ -95,6 +106,12 @@ export default function CreateTour() {
     const val =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
     setFormData({ ...formData, [name]: val });
+  };
+
+  const handleEditorChange = (content: Content) => {
+    if (content) {
+      setFormData((prev) => ({ ...prev, about: content.toString() }));
+    }
   };
 
   const handleDateChange = (date: Date | undefined, field: string) => {
@@ -244,12 +261,23 @@ export default function CreateTour() {
                 </div>
                 <div>
                   <label className="block mb-2 font-medium">About</label>
-                  <Textarea
+                  {/* <Textarea
                     name="about"
                     value={formData.about}
                     onChange={handleChange}
                     placeholder="Tell more about your tour"
                     required
+                  /> */}
+                  <MinimalTiptapEditor
+                    value={formData.about}
+                    onChange={handleEditorChange}
+                    className="w-full"
+                    editorContentClassName="p-5"
+                    output="html"
+                    placeholder="Enter About Tour"
+                    autofocus={true}
+                    editable={true}
+                    editorClassName="focus:outline-hidden"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">

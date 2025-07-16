@@ -1,6 +1,7 @@
 "use client";
 
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { usePathname } from "next/navigation";
 import DashboardLayout from "./dashboard-layout";
 
@@ -26,6 +27,7 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
       {!isAuthPage && <DashboardLayout>{children}</DashboardLayout>}
       {isAuthPage && <div className="flex-1">{children}</div>}
       <Toaster />
+      <SonnerToaster />
     </div>
   );
 }
