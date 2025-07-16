@@ -287,9 +287,9 @@ function CreateEditDialog({
 
     const payload = new FormData();
     payload.append("name", form.name);
-    payload.append("destinationId", form.description);
-    payload.append("categoryId", form.region);
-    payload.append("description", form.country);
+    payload.append("description", form.description);
+    payload.append("region", form.region);
+    payload.append("country", form.country);
 
     if (files.length !== 0) {
       payload.append("coverImage", files[0]);
