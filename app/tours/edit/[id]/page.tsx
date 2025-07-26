@@ -25,6 +25,16 @@ import { Calendar } from "@/components/ui/calendar";
 import ImageUploader from "@/components/custom/image-uploader";
 import { Switch } from "@/components/ui/switch";
 import TourPreview from "@/components/TourPreview";
+import { Content } from "@tiptap/react";
+import dynamic from "next/dynamic";
+
+const MinimalTiptapEditor = dynamic(
+  () =>
+    import("@/components/minimal-tiptap").then(
+      (mod) => mod.MinimalTiptapEditor,
+    ),
+  { ssr: false },
+);
 
 interface TourData {
   id: string;
@@ -133,6 +143,11 @@ export default function UpdateTour() {
       setDestinations(response.data.data);
     } catch (error) {
       console.error("Error fetching destinations:", error);
+    }
+  };
+  const handleEditorChange = (content: Content) => {
+    if (content) {
+      setFormData((prev) => ({ ...prev, about: content.toString() }));
     }
   };
 
@@ -284,13 +299,24 @@ export default function UpdateTour() {
                   </div>
                   <div>
                     <label className="block mb-2 font-medium">About</label>
-                    <textarea
+                    {/* <textarea
                       name="about"
                       value={formData.about}
                       onChange={handleChange}
                       rows={4}
                       className="w-full border rounded-md p-2"
                       required
+                    /> */}
+                    <MinimalTiptapEditor
+                      value={formData.about}
+                      onChange={handleEditorChange}
+                      className="w-full"
+                      editorContentClassName="p-5"
+                      output="html"
+                      placeholder="Enter About Tour"
+                      autofocus={true}
+                      editable={true}
+                      editorClassName="focus:outline-hidden"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
